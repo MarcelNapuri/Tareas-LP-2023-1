@@ -1,21 +1,21 @@
-typedef struct{ 
+typedef struct Nodo{ 
     Nodo* padre;
     char tipo[64];
     void* contenido;
 }Nodo;
 
-typedef struct {
+typedef struct Lista{
     int largo_actual;
     int largo_maximo;
     Nodo* arreglo;
 }Lista;
 
-typedef struct {
+typedef struct Directorio{
     char nombre[128];
     Lista* hijos;
 }Directorio;
 
-typedef struct{
+typedef struct Archivo{
     char nombre[128];
     char contenido[256];
 } Archivo;
