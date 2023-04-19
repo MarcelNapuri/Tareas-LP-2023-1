@@ -14,7 +14,8 @@ void insertar_lista(Lista* lista, Nodo* nodo) {
         lista->largo_maximo *= 2;
         lista->arreglo = realloc(lista->arreglo,sizeof(Nodo) * lista->largo_maximo);
     }
-    lista->arreglo[lista->largo_actual+1] = *nodo; // Agrega el nodo al final del arreglo y aumenta el largo actual
+    lista->arreglo[lista->largo_actual] = *nodo; // Agrega el nodo al final del arreglo y aumenta el largo actual
+    lista->largo_actual++;
 }
 
 Nodo* buscar_directorio(Directorio* actual, char* nombre){
@@ -41,42 +42,33 @@ Nodo* buscar_archivo(Directorio* actual, char* nombre){
     }
 }
 
-Nodo* crear_nodo(Nodo* padre, char* tipo, char* nombre) {
+Nodo* crear_nodo(Nodo* padre, char* tipo, char* nombre) {    //son nodos vacios
     Nodo* nodo = (Nodo*)malloc(sizeof(Nodo));
     nodo->padre = padre;
     nodo->tipo = tipo;
     nodo->contenido = NULL;
-    /*
-    if (tipo == "directorio"){
-        
-        nuevo_directorio->nombre = nombre;
-        nuevo_directorio->hijos = crear_lista(10);
-        nodo->contenido = nuevo_directorio;    
-    }
 
-    else if (tipo == "archivo"){
-        Archivo* nuevo_archivo = (Archivo*)malloc(sizeof(Archivo));
-        nuevo_archivo->nombre = nombre;
-        nuevo_archivo->contenido = "";
-        nodo->contenido = nuevo_archivo;
-    }
-    */
     return nodo; 
+    
 }
 
 
 void mkdir(Nodo* actual, char * nombre_directorio){
+    Nodo* nuevo_nodo = crear_nodo(actual, "Directorio" , nombre_directorio);
     Directorio* nuevo_directorio = (Directorio*)malloc(sizeof(Directorio));
     nuevo_directorio->nombre = nombre_directorio;
     nuevo_directorio->hijos = crear_lista(10);
-    actual->contenido = nuevo_directorio;
+    nuevo_nodo->contenido = nuevo_directorio;
+    insertar_lista(((Directorio*)actual->contenido)->hijos, nuevo_nodo);
 }
 
 void touch(Nodo* actual, char* nombre_archivo){
+    Nodo* nuevo_nodo = crear_nodo(actual, "Archivo", nombre_archivo);
     Archivo* nuevo_archivo = (Archivo*)malloc(sizeof(Archivo));
     nuevo_archivo->nombre = nombre_archivo;
     nuevo_archivo->contenido = "";
-    actual->contenido = nuevo_archivo;
+    nuevo_nodo->contenido = nuevo_archivo;
+    insertar_lista(((Directorio*)actual->contenido)->hijos, nuevo_nodo);
 }
 
 
