@@ -25,7 +25,7 @@ Nodo* buscar_directorio(Directorio* actual, char* nombre){
     }
     for(int i = 0; i < actual->hijos->largo_actual; i++){
         Nodo * hijo = &actual->hijos->arreglo[i];
-        if(((Directorio*)hijo->contenido)->nombre = nombre){
+        if(((Directorio*)hijo->contenido)->nombre == nombre){
             return hijo;
         }
     }
