@@ -1,5 +1,9 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 typedef struct Nodo{ 
-    Nodo* padre;
+    struct Nodo* padre;
     char tipo[64];
     void* contenido;
 }Nodo;
@@ -8,12 +12,12 @@ typedef struct Lista{
     int largo_actual;
     int largo_maximo;
     Nodo* arreglo;
-}Lista;
+} Lista;
 
 typedef struct Directorio{
     char nombre[128];
     Lista* hijos;
-}Directorio;
+} Directorio;
 
 typedef struct Archivo{
     char nombre[128];

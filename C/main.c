@@ -1,9 +1,14 @@
 #include "arbol.c"
-#include <iostream>
 #include <stdlib.h>
+#include <stdio.h>
 
 int main(){
-    Nodo * raiz = crear_nodo(NULL, "Directorio" , "C/");
-    ls(raiz);
+    Nodo* raiz = crear_raiz("C/");
+    mkdir(raiz, "Nueva Carpeta");
+    mkdir(raiz, "Otra carpeta");
+    touch(raiz, "Nuevo Archivo");
+
+    free(raiz->contenido);
+    free(raiz);
     return 0;
 }
