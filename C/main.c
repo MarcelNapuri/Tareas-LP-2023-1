@@ -13,8 +13,14 @@ int main(){
 
     Nodo* prueba_busqueda_arch = buscar_archivo(((Directorio*)raiz->contenido), "Nuevo Archivo");
 
-    write(raiz, "Nuevo Archivo" , "ejemplo");
+    write(raiz, "Nuevo Archivo" , "texto de ejemplo ");
     car(raiz, "Nuevo Archivo");
+
+    raiz = cd(raiz, "Nueva Carpeta");
+    mkdir(raiz, "Ejemplo");
+    ls(raiz);
+    raiz = cd(raiz,"..");
+    ls(raiz);
 
     free(raiz->contenido);
     free(raiz);

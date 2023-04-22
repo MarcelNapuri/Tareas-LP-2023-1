@@ -35,7 +35,7 @@ Nodo* buscar_directorio(Directorio* actual, char* nombre){
         Nodo * hijo = &actual->hijos->arreglo[i];
         //printf("%s\n" , ((Nodo*)hijo->contenido)->tipo);
         if(strcmp(((Directorio*)hijo->contenido)->nombre,nombre) == 0){
-            //printf("Directorio %s hallado correctamente\n", ((Directorio*)hijo->contenido)->nombre);
+            printf("Directorio %s hallado correctamente\n", ((Directorio*)hijo->contenido)->nombre);
             return hijo;
         }
     }
@@ -73,7 +73,7 @@ void mkdir(Nodo* actual, char * nombre_directorio){
     insertar_lista(((Directorio*)actual->contenido)->hijos, nodo_directorio);
     strcpy(((Directorio*)nodo_directorio->contenido)->nombre, nombre_directorio);
     ((Directorio*)nodo_directorio->contenido)->hijos = crear_lista(5);
-    printf("%s creado con exito\n", nombre_directorio);
+    //printf("%s creado con exito\n", nombre_directorio);
 }
 
 void touch(Nodo* actual, char* nombre_archivo){
@@ -83,7 +83,7 @@ void touch(Nodo* actual, char* nombre_archivo){
     insertar_lista(((Directorio*)actual->contenido)->hijos, nodo_archivo);
     strcpy(((Archivo*)nodo_archivo->contenido)->nombre, nombre_archivo);
     strcpy(((Archivo*)nodo_archivo->contenido)->contenido, "");
-    printf("%s creado con exito\n", nombre_archivo);
+    //printf("%s creado con exito\n", nombre_archivo);
 }
 
 void write(Nodo* actual, char* nombre_archivo , char* contenido){
@@ -125,7 +125,22 @@ Nodo* crear_raiz(char* nombre){
     return raiz;
 }
 
-Nodo* cd(Nodo* actual , char* nombre_directorio){}
+Nodo* cd(Nodo* actual , char* nombre_directorio){
+    if (nombre_directorio == "..")
+    {
+        actual = actual->padre;
+        return actual;
+    }
+    else
+    {
+        Nodo* busqueda = buscar_directorio(((Directorio*)actual->contenido), nombre_directorio);
+        actual = busqueda;
+        return actual;
+    }
+    printf("No se encontro el directorio\n");
+    return NULL;
+
+}
 
 /*
 void liberar_directorio(Directorio* dir) {
