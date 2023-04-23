@@ -35,7 +35,7 @@ Nodo* buscar_directorio(Directorio* actual, char* nombre){
         Nodo * hijo = &actual->hijos->arreglo[i];
         //printf("%s\n" , ((Nodo*)hijo->contenido)->tipo);
         if(strcmp(((Directorio*)hijo->contenido)->nombre,nombre) == 0){
-            printf("Directorio %s hallado correctamente\n", ((Directorio*)hijo->contenido)->nombre);
+            //printf("Directorio %s hallado correctamente\n", ((Directorio*)hijo->contenido)->nombre);
             return hijo;
         }
     }
@@ -54,6 +54,9 @@ Nodo* buscar_archivo(Directorio* actual, char* nombre){
             return hijo;
         }
     }
+    printf("No se encontro aqui\n");
+    return NULL;
+
 }
 
 Nodo* crear_nodo(Nodo* padre, char* tipo, char* nombre) {    //son nodos vacios
@@ -104,15 +107,15 @@ void ls(Nodo* actual){
     }
 }
 
-/*
+
 void ls_dir(Nodo* actual, char* nombre_directorio){
-    Nodo* nuevo_directorio = buscar_directorio(((Directorio*)actual->contenido)->hijos,nombre_directorio);
+    Nodo* nuevo_directorio = buscar_directorio(((Directorio*)actual->contenido),nombre_directorio);
     for(int i = 0; i < ((Directorio*)nuevo_directorio->contenido)->hijos->largo_actual; i++){
-        Nodo* hijo = ((Directorio*)nuevo_directorio->contenido)->hijos->arreglo[i];
+        Nodo* hijo = &((Directorio*)nuevo_directorio->contenido)->hijos->arreglo[i];
         printf("%s\n", ((Directorio*)hijo->contenido)->nombre);
     }
 }
-*/
+
 
 Nodo* crear_raiz(char* nombre){
     Nodo* raiz = (Nodo*)malloc(sizeof(Nodo));
@@ -126,7 +129,7 @@ Nodo* crear_raiz(char* nombre){
 }
 
 Nodo* cd(Nodo* actual , char* nombre_directorio){
-    if (nombre_directorio == "..")
+    if (strcmp(nombre_directorio,"..") == 0)
     {
         actual = actual->padre;
         return actual;
@@ -140,6 +143,16 @@ Nodo* cd(Nodo* actual , char* nombre_directorio){
     printf("No se encontro el directorio\n");
     return NULL;
 
+}
+
+
+void liberar_memoria(Nodo* actual){
+    if(actual == NULL){
+        return;
+    }
+    if(strcmp(actual->tipo,"archivo") == 0){
+        A
+    }
 }
 
 /*
