@@ -59,8 +59,35 @@ int main(){
             }
             
         }
+        else if (strcmp(comando,"mapdir") == 0)
+        {
+
+            char* funcion = strtok(NULL, delimitador);
+            if(strcmp(funcion,"ls") == 0){
+                mapdir(raiz, &ls_dir,"");
+            }
+            else if (strcmp(funcion,"mkdir") == 0){
+                char* parametro = strtok(NULL, "");
+                mapdir(raiz,&mkdir,parametro);
+            }
+            else if (strcmp(funcion,"touch") == 0){
+                char* parametro = strtok(NULL, "");
+                mapdir(raiz,&touch,parametro);
+            }
+            else
+            {
+                printf("comando incorrecto\n");
+            }
+            
+        }
+        
         else if (strcmp(comando,"close") == 0)
         {
+            while (raiz->padre != NULL)
+            {
+                raiz = cd(raiz, "..");
+            }
+            
             flag = false;
         }
         else
@@ -70,8 +97,7 @@ int main(){
         
     } 
 
-    
-
+    liberar_memoria(raiz);
     return 0;
 }
 

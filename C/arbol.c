@@ -75,7 +75,7 @@ void mkdir(Nodo* actual, char * nombre_directorio){
     nodo_directorio->contenido = (Directorio*)malloc(sizeof(Directorio));
     insertar_lista(((Directorio*)actual->contenido)->hijos, nodo_directorio);
     strcpy(((Directorio*)nodo_directorio->contenido)->nombre, nombre_directorio);
-    ((Directorio*)nodo_directorio->contenido)->hijos = crear_lista(5);
+    ((Directorio*)nodo_directorio->contenido)->hijos = crear_lista(1);
     //printf("%s creado con exito\n", nombre_directorio);
 }
 
@@ -109,11 +109,35 @@ void ls(Nodo* actual){
 
 
 void ls_dir(Nodo* actual, char* nombre_directorio){
+    if (strcmp(nombre_directorio,"") == 0)
+    {
+        ls(actual);
+        return;
+    }
+    
     Nodo* nuevo_directorio = buscar_directorio(((Directorio*)actual->contenido),nombre_directorio);
     for(int i = 0; i < ((Directorio*)nuevo_directorio->contenido)->hijos->largo_actual; i++){
         Nodo* hijo = &((Directorio*)nuevo_directorio->contenido)->hijos->arreglo[i];
         printf("%s\n", ((Directorio*)hijo->contenido)->nombre);
     }
+}
+
+void mapdir(Nodo* actual , void(*instruccion)(Nodo*, char*) , char* parametro_instruccion){
+    if(strcmp(actual->tipo,"Directorio") == 0){
+        for (int i = 0; i < ((Directorio*)actual->contenido)->hijos->largo_actual; i++){
+            Nodo* hijo = &((Directorio*)actual->contenido)->hijos->arreglo[i];
+            if (strcmp(hijo->tipo,"Directorio") == 0){
+                mapdir(hijo,instruccion,parametro_instruccion);
+            }
+        }
+        instruccion(actual, parametro_instruccion);
+    }
+    else
+    {
+        printf("No se puede aplicar el comando a '%s'. Solo se puede aplicar a directorios.\n", ((Archivo*)actual->contenido)->nombre);
+
+    }
+    
 }
 
 
@@ -123,7 +147,7 @@ Nodo* crear_raiz(char* nombre){
     strcpy(raiz->tipo,"Directorio");
     raiz->contenido = (Directorio*)malloc(sizeof(Directorio));
     strcpy(((Directorio*)raiz->contenido)->nombre, nombre);
-    ((Directorio*)raiz->contenido)->hijos = crear_lista(5);
+    ((Directorio*)raiz->contenido)->hijos = crear_lista(1);
     //printf("%s\n" , raiz->tipo);
     return raiz;
 }
@@ -145,29 +169,17 @@ Nodo* cd(Nodo* actual , char* nombre_directorio){
 
 }
 
-
-void liberar_memoria(Nodo* actual){
-    if(actual == NULL){
-        return;
-    }
-    if(strcmp(actual->tipo,"archivo") == 0){
-        A
-    }
-}
-
-/*
-void liberar_directorio(Directorio* dir) {
-    for(int i = 0; i < dir->hijos->largo_actual; i++) {
-        Nodo* hijo = &dir->hijos->arreglo[i];
-        if(strcmp(hijo->tipo, "Directorio") == 0) {
-            liberar_directorio(hijo->contenido);
-        } else {
-            free(hijo->contenido);
+void liberar_memoria(Nodo* actual) {
+    if (strcmp(actual->tipo, "Directorio") == 0) { // Si el nodo es un Directorio, liberar la memoria de sus hijos
+        Lista* hijos = ((Directorio*)actual->contenido)->hijos;
+        for (int i = 0; i < hijos->largo_actual; i++) {
+            Nodo* hijo = &hijos->arreglo[i];
+            liberar_memoria(hijo);
         }
-        free(hijo);
+        free(hijos->arreglo); // Liberar la memoria del arreglo de hijos
+        free(hijos); // Liberar la memoria de la estructura Lista de hijos
+    } else { // Si el nodo es un Archivo, liberar la memoria asignada al contenido
+        free(((Archivo*)actual->contenido));
     }
-    free(dir->hijos->arreglo);
-    free(dir->hijos);
-    free(dir);
+    free(actual); // Liberar la memoria asignada al nodo
 }
-*/

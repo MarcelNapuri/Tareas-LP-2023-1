@@ -54,3 +54,6 @@ void car(Nodo* actual, char* nombre_archivo);
 //imprime todos los hijos del directorio actual o del seleccionado
 void ls(Nodo* actual);
 void ls_dir(Nodo* actual, char* nombre_directorio);
+
+//Aplica la instruccion a todos los directorios
+void mapdir(Nodo* actual , void(*instruccion)(Nodo*, char*) , char* parametro_instruccion);
