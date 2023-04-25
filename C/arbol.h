@@ -1,3 +1,6 @@
+#ifndef ARBOL_H
+#define ARBOL_H
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -37,3 +40,8 @@ void cat(Nodo* actual, char* nombre_archivo);
 void ls(Nodo* actual);
 void ls_dir(Nodo* actual, char* nombre_directorio);
 void mapdir(Nodo* actual , void(*instruccion)(Nodo*, char*) , char* parametro_instruccion);
+Nodo* crear_raiz(char* nombre);
+Nodo* cd(Nodo* actual, char* destino);
+void liberar_memoria(Nodo* raiz);
+
+#endif // ARBOL_H

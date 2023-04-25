@@ -1,4 +1,4 @@
-#include "arbol.c"
+#include "arbol.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
