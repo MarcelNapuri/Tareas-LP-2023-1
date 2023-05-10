@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +14,9 @@ public class Jugador extends Personaje{
         super();
         this.nombre = nombre;
         this.xp = 0;
-        this.arma = new Arma();
+        this.inventario = new ArrayList<Item>();
+        this.equipamiento = new HashMap<String, Equipamiento>();
+        //this.arma = new Arma("ESPADa", , xp, getRepresentacion())   //espada basica
     }
 
     @Override

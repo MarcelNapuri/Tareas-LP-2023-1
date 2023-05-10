@@ -1,23 +1,21 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Mundo implements Visible {
+public class Mundo{
     private int nivel;
     private int alto;
     private int ancho;
     private int enemigos;
     private List<List<Visible>> mapa;
 
-    @Override
-    public char getRepresentacion(){
-        return 0;
-    }
+
     public Mundo(int alto,int ancho){
-        this.nivel = 1;
+        this.nivel = 1;    //puede cambiar
         this.alto = alto;
         this.ancho = ancho;
-        this.enemigos = 0;
-        this.mapa = new ArrayList<List<Visible>>();    
+        this.enemigos = 1;      //puede cambiar
+        this.mapa = new ArrayList<List<Visible>>();
+        
     }
 
     public void mostrar() {
@@ -32,18 +30,19 @@ public class Mundo implements Visible {
 
     public void nuevoNivel() {
         this.nivel++;
-        /* 
         mapa = new ArrayList<>();
         for (int i = 0; i < alto; i++) {
             List<Visible> fila = new ArrayList<>();
             for (int j = 0; j < ancho; j++) {
                 // Agregar entidades aleatorias al mapa
-                fila.add(new Enemigo());
+                
             }
             mapa.add(fila);
         }
-        */
+    
     }
+
+
     public int getNivel() {
         return nivel;
     }
