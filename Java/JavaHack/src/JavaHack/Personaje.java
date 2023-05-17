@@ -1,13 +1,9 @@
+package JavaHack;
+
 public class Personaje implements Visible{
 
     private float hp;
     private int nivel;
-
-
-    @Override
-    public char getRepresentacion() {       //se representa por la letra 'O'
-        return 'O' ;
-    }
 
     public Personaje(){
         this.hp = 100;
@@ -17,6 +13,11 @@ public class Personaje implements Visible{
     public Personaje(int hp, int nivel){
         this.hp = hp;
         this.nivel = nivel;
+    }
+    
+    @Override
+    public char getRepresentacion() {       //se representa por la letra 'O'
+        return 'O' ;
     }
 
     public void recibirDanio(int dmg){  //reduce la cantidad de hp del ppersonaje

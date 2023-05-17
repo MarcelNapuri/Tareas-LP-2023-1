@@ -1,3 +1,5 @@
+package JavaHack;
+
 public abstract class Item implements Visible{
 
     private char representacion;
@@ -9,7 +11,7 @@ public abstract class Item implements Visible{
         this.nombre = nombre;
     }
     
-    public char getRepresentacion() {
+    public char getRepresentacion(){
         return representacion;
     }
 
@@ -25,7 +27,4 @@ public abstract class Item implements Visible{
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
-    
-
 }
