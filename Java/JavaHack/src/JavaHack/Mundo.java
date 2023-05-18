@@ -40,8 +40,8 @@ public class Mundo{
                     fila.add(new Personaje(getNivel()*5 + 80 ,getNivel()));
                     enemigos+=1;
                 } else {
-                    Visible texto = new Texto(" ");
-                    fila.add(texto);
+                    Visible vacio = new CasillaVacia();
+                    fila.add(vacio);
                 }
             }
             mapa.add(fila);
@@ -53,12 +53,14 @@ public class Mundo{
     public void mostrar() {
         for (int i = 0; i < alto; i++) {
             for (int j = 0; j < mapa.get(i).size(); j++) {
-                char c = mapa.get(i).get(j).getRepresentacion();
+                Visible v = mapa.get(i).get(j);
+                char c = (v != null) ? v.getRepresentacion() : ' ';
                 System.out.print(" [" + c + "] ");
             }
             System.out.println(); // Agrega un salto de línea después de cada fila
         }
     }
+    
     
 
     public void nuevoNivel() {
@@ -84,8 +86,8 @@ public class Mundo{
                     fila.add(new Personaje(getNivel()*5 + 80 ,getNivel()));
                     enemigos+=1;
                 } else {
-                    Visible texto = new Texto(" ");
-                    fila.add(texto);
+                    Visible vacio = new CasillaVacia();
+                    fila.add(vacio);
                 }
             }
             mapa.add(fila);
@@ -99,7 +101,67 @@ public class Mundo{
         this.x = 0;
         this.y = 0;
     }
+    /* 
+    public void moverJugador(Jugador jugador, int x, int y) {
+        // Verificar si la nueva posición está dentro del mapa
+        if (x >= 0 && x < ancho && y >= 0 && y < alto) {
+
+            if (mapa.get(y - 1).get(x - 1) instanceof CasillaVacia) {
+                this.mapa.get(getY()).set(getX(), null);      
+                this.mapa.get(y -1).set(x - 1, jugador);
+                setPosicion(x -1 , y - 1);
+            }
+            else{
+                System.out.println("Error, no se puede mover al jugador");
+            }
     
+        } 
+        else{
+            System.out.println("Fuera de la pantalla");
+        }
+    }
+    */
+    public void moverJugador(Jugador jugador, String direccion) {
+        int nuevaX = getX();
+        int nuevaY = getY();
+    
+        // Calcular las nuevas coordenadas según la dirección
+        if (direccion.equalsIgnoreCase("arriba")) {
+            nuevaY--;
+        } else if (direccion.equalsIgnoreCase("abajo")) {
+            nuevaY++;
+        } else if (direccion.equalsIgnoreCase("izquierda")) {
+            nuevaX--;
+        } else if (direccion.equalsIgnoreCase("derecha")) {
+            nuevaX++;
+        } else {
+            System.out.println("Dirección inválida");
+            return;
+        }
+    
+        // Verificar si la nueva posición está dentro del mapa
+        if (nuevaX >= 0 && nuevaX < ancho && nuevaY >= 0 && nuevaY < alto) {
+            if (mapa.get(nuevaY).get(nuevaX) instanceof CasillaVacia) {
+                this.mapa.get(getY()).set(getX(), null);
+                this.mapa.get(getY()).set(getX(), new CasillaVacia());
+                this.mapa.get(nuevaY).set(nuevaX, jugador);
+                setPosicion(nuevaX, nuevaY);
+            } else {
+                System.out.println("Error, no se puede mover al jugador");
+            }
+        } else {
+            System.out.println("Fuera de la pantalla");
+        }
+    }
+    
+    
+
+    
+
+    public void setPosicion(int x , int y){
+        this.x = x;
+        this.y = y;
+    }
 
     public int getNivel() {
         return nivel;
@@ -131,6 +193,16 @@ public class Mundo{
     public void setMapa(List<List<Visible>> mapa) {
         this.mapa = mapa;
     }
+
+    public int getX(){
+        return x;
+    } 
+
+    public int getY(){
+        return y;
+    }
+    
+
 
     
 }

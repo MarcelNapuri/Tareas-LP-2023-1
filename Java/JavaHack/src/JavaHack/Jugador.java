@@ -20,7 +20,16 @@ public class Jugador extends Personaje{
         this.inventario = new ArrayList<Item>();
         this.equipamiento = new HashMap<String, Equipamiento>();
         this.arma = new Arma("Espada basica",0.5f , 0.25f, getRepresentacion());   //espada basica
+        inventario.add(arma);
+
+        //equipamiento de prueba 
+        Equipamiento equiArmDefecto = new Equipamiento('A', "Armadura de cuero", "Armadura", 2, 1);
+        Equipamiento equiBotaDefecto = new Equipamiento('B', "Botas basicas", "Botas", 1, 1);
         
+        inventario.add(equiArmDefecto);
+        inventario.add(equiBotaDefecto);
+        equipamiento.put(equiArmDefecto.getTipo(), equiArmDefecto);
+        equipamiento.put(equiBotaDefecto.getTipo(), equiBotaDefecto);
     }
 
     @Override
@@ -38,26 +47,7 @@ public class Jugador extends Personaje{
 
         return 3 * getNivel() + atq;
     }
-/* 
-        if (equipamiento.isEmpty()) {
-            float atq = arma.calcularAtaqueArma(1,1);
-            return 3*getNivel() + atq;    
-        }
-        if (equipamiento.get("Armadura")) {
-            
-        }
-        else if (equipamiento.get("Botas")) {
-            
-        } 
-        else if (equipamiento.get("Amuleto")){
-            
-        }
-    
-        float atq = arma.calcularAtaqueArma(null, null);
-        return 3* getNivel() + atq;;
-        
-    }
-    */
+
 
     public void ganarXp(int xp){
         this.xp += xp;
@@ -93,6 +83,19 @@ public class Jugador extends Personaje{
         System.out.println("Hp : " + getHp());
         System.out.println("Xp : " + getXp());
         System.out.println("Arma : " + arma.getNombre()  + "\n multiplicador de fuerza : " + arma.getMul_str() + "\n multiplicador de inteligencia : " + arma.getMul_int());
+    }
+
+    public void verInventario() {
+        System.out.println("Inventario:");
+        for (Item item : inventario) {
+            if (item instanceof Arma) {
+                System.out.println("- Arma: " + item.getNombre() + " (Fuerza: "+ arma.getMul_str() + " Inteligencia: "+ arma.getMul_int() + ")");
+            } else if (item instanceof Equipamiento) {
+                Equipamiento equipamiento = (Equipamiento) item;
+                System.out.println("- Equipamiento: " + equipamiento.getNombre() + " (Tipo: " + equipamiento.getTipo() + ", Str: " + equipamiento.getStr() + ", Int: " + equipamiento.getIntel() + ")");
+            }   
+            
+        }
     }
 
 

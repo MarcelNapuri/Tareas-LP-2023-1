@@ -20,8 +20,46 @@ public class JavaHack {
         Mundo mundo = new Mundo(alto, ancho);
         mundo.reiniciarPosicion(jugador);
 
-        System.out.println("--------------------------");
-        mundo.mostrar();
+
+
+        while (jugador.getHp() > 0) {
+            System.out.println("--------------------------");
+            mundo.mostrar();
+            System.out.println("--------------------------");
+            System.out.println("¿Qué acción deseas realizar?");
+            System.out.println("1. Ver estadísticas");
+            System.out.println("2. Mover");
+            System.out.println("3. Ver inventario");
+            int opcion = input.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    jugador.verEstadisticas();
+                    break;
+                
+                case 2:
+                    System.out.println("Ingrese hacia donde se quiere mover:");
+                    /* 
+                    System.out.print("coordenada x: ");
+                    int x = input.nextInt();
+                    System.out.print("coordenada y:");
+                    int y = input.nextInt();
+                    */
+                    String direccion = input.next(); 
+                    mundo.moverJugador(jugador, direccion);
+                    break;
+
+                case 3:
+                    jugador.verInventario();
+                    break;
+                    
+                default:
+                    System.out.println("opcion invalida");
+                    break;
+            }
+        }
+
+
 
         input.close();
     }
