@@ -37,6 +37,7 @@ public class JavaHack {
             System.out.println("1. Ver estadísticas");
             System.out.println("2. Mover");
             System.out.println("3. Ver inventario");
+            System.out.println("4. Salir del Juego");
             int opcion = input.nextInt();
 
             input.nextLine();
@@ -47,7 +48,7 @@ public class JavaHack {
                     break;
                 
                 case 2:
-                    System.out.println("Ingrese hacia donde se quiere mover:");
+                    System.out.println("Ingrese hacia donde se quiere mover:\n(arriba, abajo, derecha, izquierda)");
                     String direccion = input.nextLine(); 
                     mundo.moverJugador(jugador, direccion, input);
                     break;
@@ -55,7 +56,12 @@ public class JavaHack {
                 case 3:
                     jugador.verInventario();
                     break;
-                    
+                
+                case 4:
+                    System.out.println("Gracias por jugar");
+                    jugador.setHp(0);
+                    break;
+
                 default:
                     System.out.println("opcion invalida");
                     break;

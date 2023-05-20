@@ -135,10 +135,10 @@ public class Mundo{
                     Visible vacio = new CasillaVacia(); //casilla vacoa
                     fila.add(vacio);
                 }
-            mapa.add(fila);
             }
-            setMapa(mapa);
+            mapa.add(fila);
         }
+        setMapa(mapa);
     }
     
     /**
@@ -154,7 +154,7 @@ public class Mundo{
 
     /**
      * Mueve al jugador a una casilla, usa los atributos x e y para moverse por el mapa.
-     * Dependiendo donde vaya el jugador, es decir, a una casilla vacia, hacia un enemigo o a un objeto, ejecutara 
+     * Dependiendo donde vaya el jugador, es decir, a una casilla vacia, hacia un enemigo o a un objeto, ejecutará 
      * determinadas acciones
      * @param jugador: jugador que se mueve
      * @param direccion: direccion que se mueve el jugador
@@ -179,13 +179,13 @@ public class Mundo{
         }
     
         if (nuevaX >= 0 && nuevaX < ancho && nuevaY >= 0 && nuevaY < alto) {
-            if (mapa.get(nuevaY).get(nuevaX) instanceof CasillaVacia) {
+            if (mapa.get(nuevaY).get(nuevaX) instanceof CasillaVacia) { //casilla vacia
                 this.mapa.get(getY()).set(getX(), null);
                 this.mapa.get(getY()).set(getX(), new CasillaVacia());
                 this.mapa.get(nuevaY).set(nuevaX, jugador);
                 setPosicion(nuevaX, nuevaY);
 
-            }else if (mapa.get(nuevaY).get(nuevaX) instanceof Personaje) {
+            }else if (mapa.get(nuevaY).get(nuevaX) instanceof Personaje) {  //enemigo
                 Personaje enemigo = (Personaje)mapa.get(nuevaY).get(nuevaX);
                 System.out.println("enemigo encontrado");
                 boolean flag = jugador.combate(jugador, enemigo, input);
@@ -201,7 +201,7 @@ public class Mundo{
                 this.mapa.get(nuevaY).set(nuevaX, jugador);
                 setPosicion(nuevaX, nuevaY);
 
-            }else if (mapa.get(nuevaY).get(nuevaX) instanceof Item) {
+            }else if (mapa.get(nuevaY).get(nuevaX) instanceof Item) {      //item, puede ser un equipo o arma
                 Item item = (Item)mapa.get(nuevaY).get(nuevaX);
                 System.out.println("Item encontrado: " + item.getNombre());
                 System.out.println("¿Deseas recoger el item? (s/n)");
@@ -221,13 +221,16 @@ public class Mundo{
                         System.out.println("Objeto recogido y guardado en el inventario");
                         System.out.println(equipo.getNombre() + "\n Fuerza: " + equipo.getStr() + "\n Inteligencia: " + equipo.getIntel());
                         jugador.equipar(equipo);
+                        jugador.getInventario().add(equipo);
                     }
                 }
                 else{
                     System.out.println("No se ha recogido el item");
                 }
-
-
+                this.mapa.get(getY()).set(getX(), null);
+                this.mapa.get(getY()).set(getX(), new CasillaVacia());
+                this.mapa.get(nuevaY).set(nuevaX, jugador);
+                setPosicion(nuevaX, nuevaY);
             } else {
                 System.out.println("Error, no se puede mover al jugador");
             }
