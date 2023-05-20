@@ -2,6 +2,8 @@ package JavaHack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
 public class Mundo{
     private int nivel;
@@ -29,15 +31,34 @@ public class Mundo{
                 if (r <= Math.min(0.05 + 0.01 * getNivel(), 20)) {
                     if (Math.random() < 0.5) {
                         // Crear un objeto Equipamiento aleatorio
-                        fila.add(new Equipamiento("Nombre del equipamiento", 'r'));
+                        Random random = new Random();
+                        if (random.nextInt(3) + 1 == 1 ) { //Armadura
+
+                            String [] armaduras = {"Armadura de bronce" , "Armadura de plata" , "Armadura de oro"};
+                            Random randomArm = new Random();
+                            int indice = randomArm.nextInt(armaduras.length); 
+                            fila.add(new Equipamiento('e' , armaduras[indice] , "Armadura" , getNivel()*random.nextInt(15 - 3 + 1) + 3,getNivel()*random.nextInt(15 - 3 + 1) + 3 ));
+                        }
+                        else if(random.nextInt(3) + 1 == 2 ){ //Botas
+                            String [] botas = {"Botas de bronce" , "Botas de plata" , "Botas de oro"};
+                            Random randomBot = new Random();
+                            int indice = randomBot.nextInt(botas.length); 
+                            fila.add(new Equipamiento('e' , botas[indice] , "Botas" , getNivel()*random.nextInt(15 - 3 + 1) + 3,getNivel()*random.nextInt(15 - 3 + 1) + 3 ));
+                        }
+                        else{
+                            String [] amuletos = {"Fuego de cristal","Manzana dorada" , "Sellos espirituales" , "Dientes de dragon" , "Lycoris"};
+                            Random randomArm = new Random();
+                            int indice = randomArm.nextInt(amuletos.length); 
+                            fila.add(new Equipamiento('e' , amuletos[indice] , "Amuletos" , getNivel()*random.nextInt(15 - 3 + 1) + 3,getNivel()*random.nextInt(15 - 3 + 1) + 3 ));
+                        }
 
                     } else {
                         // Crear un objeto Arma aleatorio
-                        fila.add(new Arma("Nombre del arma", 1.5f, 0.5f, 'a'));
+                        fila.add(new Arma('a'));
                     }
                     
                 } else if (r > Math.min(0.05 + 0.01 * getNivel(), 20) && r <= Math.min(0.2 + 0.01 * getNivel(), 55)) {
-                    fila.add(new Personaje(getNivel()*5 + 80 ,getNivel()));
+                    fila.add(new Personaje(getNivel()*5 + 80 ,getNivel()));     //enemigo
                     enemigos+=1;
                 } else {
                     Visible vacio = new CasillaVacia();
@@ -47,6 +68,7 @@ public class Mundo{
             mapa.add(fila);
             
         }
+        this.mapa.get(this.y).set(this.x, null);
         
     }
 
@@ -101,27 +123,8 @@ public class Mundo{
         this.x = 0;
         this.y = 0;
     }
-    /* 
-    public void moverJugador(Jugador jugador, int x, int y) {
-        // Verificar si la nueva posición está dentro del mapa
-        if (x >= 0 && x < ancho && y >= 0 && y < alto) {
 
-            if (mapa.get(y - 1).get(x - 1) instanceof CasillaVacia) {
-                this.mapa.get(getY()).set(getX(), null);      
-                this.mapa.get(y -1).set(x - 1, jugador);
-                setPosicion(x -1 , y - 1);
-            }
-            else{
-                System.out.println("Error, no se puede mover al jugador");
-            }
-    
-        } 
-        else{
-            System.out.println("Fuera de la pantalla");
-        }
-    }
-    */
-    public void moverJugador(Jugador jugador, String direccion) {
+    public void moverJugador(Jugador jugador, String direccion, Scanner input) {
         int nuevaX = getX();
         int nuevaY = getY();
     
@@ -146,6 +149,50 @@ public class Mundo{
                 this.mapa.get(getY()).set(getX(), new CasillaVacia());
                 this.mapa.get(nuevaY).set(nuevaX, jugador);
                 setPosicion(nuevaX, nuevaY);
+
+            }else if (mapa.get(nuevaY).get(nuevaX) instanceof Personaje) {
+                Personaje enemigo = (Personaje)mapa.get(nuevaY).get(nuevaX);
+                System.out.println("enemigo encontrado");
+                boolean flag = jugador.combate(jugador, enemigo, input);
+                if(flag == true){
+                    jugador.ganarXp(10*(getAlto() + getAncho()) /(1 - getEnemigos()/getAncho()*getAlto()));
+                    System.out.print("ingrese cualquier tecla para continuar : ");
+                    setEnemigos(getEnemigos() - 1);
+                    jugador.setHp(jugador.getHp() + 30);
+                    input.nextLine();
+                } 
+                this.mapa.get(getY()).set(getX(), null);
+                this.mapa.get(getY()).set(getX(), new CasillaVacia());
+                this.mapa.get(nuevaY).set(nuevaX, jugador);
+                setPosicion(nuevaX, nuevaY);
+
+            }else if (mapa.get(nuevaY).get(nuevaX) instanceof Item) {
+                Item item = (Item)mapa.get(nuevaY).get(nuevaX);
+                System.out.println("Item encontrado: " + item.getNombre());
+                System.out.println("¿Deseas recoger el item? (s/n)");
+                String respuesta = input.next();
+
+                if (respuesta.equalsIgnoreCase("s")) {
+                    if (item instanceof Arma) {
+                        Arma arma = (Arma)item;
+                        jugador.getInventario().add(arma);
+                        System.out.println("Arma recogida y guardada en el inventario");
+                        System.out.println(arma.getNombre() + "\n Fuerza: " + arma.getMul_str() + "\n Inteligencia: " + arma.getMul_int());
+                        jugador.equipar(arma);
+                    }
+                    else if (item instanceof Equipamiento) {
+                        Equipamiento equipo = (Equipamiento)item;
+                        jugador.getInventario().add(equipo);
+                        System.out.println("Objeto recogido y guardado en el inventario");
+                        System.out.println(equipo.getNombre() + "\n Fuerza: " + equipo.getStr() + "\n Inteligencia: " + equipo.getIntel());
+                        jugador.equipar(equipo);
+                    }
+                }
+                else{
+                    System.out.println("No se ha recogido el item");
+                }
+
+
             } else {
                 System.out.println("Error, no se puede mover al jugador");
             }
@@ -153,9 +200,6 @@ public class Mundo{
             System.out.println("Fuera de la pantalla");
         }
     }
-    
-    
-
     
 
     public void setPosicion(int x , int y){

@@ -21,7 +21,6 @@ public class Equipamiento extends Item{
         this.intel = intel;
     }
 
-
     public String getTipo() {
         return tipo;
     }

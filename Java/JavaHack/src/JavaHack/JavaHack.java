@@ -23,14 +23,23 @@ public class JavaHack {
 
 
         while (jugador.getHp() > 0) {
-            System.out.println("--------------------------");
+            if (mundo.getEnemigos() <= 0) {
+                System.out.println("Felicidades, has derrotado a todos los enemigos de esta zona\n ¿Quieres continuar? presiona cualquier tecla para continuar");
+                input.nextLine();
+                mundo.nuevoNivel();
+                mundo.reiniciarPosicion(jugador);
+            }            
+            System.out.println("--------------------------\n Enemigos en el mapa: " + mundo.getEnemigos());
             mundo.mostrar();
             System.out.println("--------------------------");
+
             System.out.println("¿Qué acción deseas realizar?");
             System.out.println("1. Ver estadísticas");
             System.out.println("2. Mover");
             System.out.println("3. Ver inventario");
             int opcion = input.nextInt();
+
+            input.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -39,14 +48,8 @@ public class JavaHack {
                 
                 case 2:
                     System.out.println("Ingrese hacia donde se quiere mover:");
-                    /* 
-                    System.out.print("coordenada x: ");
-                    int x = input.nextInt();
-                    System.out.print("coordenada y:");
-                    int y = input.nextInt();
-                    */
-                    String direccion = input.next(); 
-                    mundo.moverJugador(jugador, direccion);
+                    String direccion = input.nextLine(); 
+                    mundo.moverJugador(jugador, direccion, input);
                     break;
 
                 case 3:
@@ -58,9 +61,6 @@ public class JavaHack {
                     break;
             }
         }
-
-
-
         input.close();
     }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 
 public class Jugador extends Personaje{
@@ -23,6 +24,7 @@ public class Jugador extends Personaje{
         inventario.add(arma);
 
         //equipamiento de prueba 
+        /* 
         Equipamiento equiArmDefecto = new Equipamiento('A', "Armadura de cuero", "Armadura", 2, 1);
         Equipamiento equiBotaDefecto = new Equipamiento('B', "Botas basicas", "Botas", 1, 1);
         
@@ -30,6 +32,7 @@ public class Jugador extends Personaje{
         inventario.add(equiBotaDefecto);
         equipamiento.put(equiArmDefecto.getTipo(), equiArmDefecto);
         equipamiento.put(equiBotaDefecto.getTipo(), equiBotaDefecto);
+        */
     }
 
     @Override
@@ -38,14 +41,32 @@ public class Jugador extends Personaje{
     }
 
     public float calcularAtaque(){
+        int strTotal = 0;
+        int intelTotal = 0;
 
-        float atq = arma.calcularAtaqueArma(null, null);
-
-        for (Equipamiento eq : equipamiento.values()) {
-            atq += eq.getIntel() + eq.getStr();
+        if(equipamiento.isEmpty()){
+            strTotal = 1;
+            intelTotal = 1 ;
+        }
+        else{
+            for (Equipamiento eq : equipamiento.values()) {
+                strTotal += eq.getStr();
+            }
+            for (Equipamiento eq : equipamiento.values()) {
+                intelTotal += eq.getIntel();
+            }
         }
 
-        return 3 * getNivel() + atq;
+        float atq = arma.calcularAtaqueArma(strTotal, intelTotal);
+
+        if(!equipamiento.isEmpty()){
+           for (Equipamiento eq : equipamiento.values()) {
+            atq += eq.getIntel() + eq.getStr();
+            } 
+        }
+        
+
+        return (3 * getNivel()) + atq;
     }
 
 
@@ -54,7 +75,9 @@ public class Jugador extends Personaje{
         if (this.xp >= 100) {
             this.xp -= 100; 
             this.setNivel(this.getNivel() + 1);
+            this.setHp(100);
             System.out.println(this.getnombre() + " ha subido de nivel a " + this.getNivel() + "!");
+
         }
     }
 
@@ -82,7 +105,7 @@ public class Jugador extends Personaje{
         System.out.println("Nombre : " + getnombre());
         System.out.println("Hp : " + getHp());
         System.out.println("Xp : " + getXp());
-        System.out.println("Arma : " + arma.getNombre()  + "\n multiplicador de fuerza : " + arma.getMul_str() + "\n multiplicador de inteligencia : " + arma.getMul_int());
+        System.out.println("Arma : " + arma.getNombre());
     }
 
     public void verInventario() {
@@ -98,6 +121,32 @@ public class Jugador extends Personaje{
         }
     }
 
+    public boolean combate(Jugador jugador, Personaje enemigo, Scanner input){
+        boolean turnoJugador = Math.random() < 0.5;
+        System.out.println("Vida de "+ jugador.getnombre() + ": " + jugador.getHp());
+        System.out.println("vida del enemigo: " + enemigo.getHp());
+        System.out.print("ingrese cualquier tecla para continuar : ");
+        input.nextLine();
+        while (jugador.getHp() > 0 && enemigo.getHp() > 0) {
+
+            if (turnoJugador) {
+                enemigo.recibirDanio(jugador.calcularAtaque());
+            }
+            else{
+                jugador.recibirDanio(enemigo.calcularAtaque());
+            }
+            turnoJugador = !turnoJugador;
+            System.out.println("Vida de "+ jugador.getnombre() + ": " + jugador.getHp());
+            System.out.println("vida del enemigo: " + enemigo.getHp());
+        }
+        if (jugador.getHp() > 0) {
+            System.out.println("¡Ganaste el combate!");
+            return true;
+        } else {
+            System.out.println("¡Perdiste el combate!");
+            return false;
+        }
+    }
 
     public int getXp() {
         return xp;

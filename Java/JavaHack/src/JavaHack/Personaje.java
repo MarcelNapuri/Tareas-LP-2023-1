@@ -20,10 +20,10 @@ public class Personaje implements Visible{
         return 'O' ;
     }
 
-    public void recibirDanio(int dmg){  //reduce la cantidad de hp del ppersonaje
+    public void recibirDanio(Float dmg){  //reduce la cantidad de hp del ppersonaje
         this.hp = getHp() - dmg;
         if (this.hp <= 0) {
-            System.out.println(" ha muerto.");      //this.getClass().getSimpleName() + 
+            System.out.println("ha muerto.");      //this.getClass().getSimpleName() + 
         }
     }
 
