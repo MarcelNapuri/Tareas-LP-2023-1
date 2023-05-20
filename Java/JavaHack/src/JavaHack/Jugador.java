@@ -13,33 +13,36 @@ public class Jugador extends Personaje{
     private List<Item> inventario;
     private Map<String,Equipamiento> equipamiento;
     private Arma arma;
-    
+
+    /**
+    * Constructor de la clase Jugador
+    */
     public Jugador(String nombre){
         super();
         this.nombre = nombre;
         this.xp = 0;
         this.inventario = new ArrayList<Item>();
         this.equipamiento = new HashMap<String, Equipamiento>();
-        this.arma = new Arma("Espada basica",0.5f , 0.25f, getRepresentacion());   //espada basica
+        this.arma = new Arma("Espada basica",1.5f , 1.25f, getRepresentacion());   //espada basica
         inventario.add(arma);
 
-        //equipamiento de prueba 
-        /* 
-        Equipamiento equiArmDefecto = new Equipamiento('A', "Armadura de cuero", "Armadura", 2, 1);
-        Equipamiento equiBotaDefecto = new Equipamiento('B', "Botas basicas", "Botas", 1, 1);
-        
-        inventario.add(equiArmDefecto);
-        inventario.add(equiBotaDefecto);
-        equipamiento.put(equiArmDefecto.getTipo(), equiArmDefecto);
-        equipamiento.put(equiBotaDefecto.getTipo(), equiBotaDefecto);
-        */
     }
 
+    /**
+     * Representacion char de Jugadores
+     * @return "J" : char de Jugador
+     */
     @Override
     public char getRepresentacion(){
         return 'J';
     }
 
+    /**
+     * Calcula el ataque del jugador, usando el equipamiento que lleve puesto
+     * y su arma establecida. El ataque se calcula como 3* nivel del jugador + ataque del arma
+     * 
+     * @return (3 * getNivel()) + atq : ataque calculado
+     */
     public float calcularAtaque(){
         int strTotal = 0;
         int intelTotal = 0;
@@ -69,7 +72,11 @@ public class Jugador extends Personaje{
         return (3 * getNivel()) + atq;
     }
 
-
+    /**
+     * Le otorga xp al jugador, si es necesario incrementa su nivel
+     * 
+     * @param xp : experiencia ganada que se suma a la actual
+     */
     public void ganarXp(int xp){
         this.xp += xp;
         if (this.xp >= 100) {
@@ -81,10 +88,19 @@ public class Jugador extends Personaje{
         }
     }
 
+    /**
+     * Equipa un arma al jugador
+     * @param arma: arma a equipar
+     */
     public void equipar(Arma arma){
         this.arma = arma;
     }
 
+    /**
+     * equipa un tipo de objeto al jugador, pueden ser Botas, Armaduras o Amuletos
+     * 
+     * @param equipamiento: onjeto a equipar
+     */
     public void equipar(Equipamiento equipamiento){
         if (equipamiento != null) {
             String tipoEquipamiento = equipamiento.getTipo();
@@ -100,6 +116,9 @@ public class Jugador extends Personaje{
         }
     }
 
+    /**
+     * Muestra las estadisticas actuales del jugador
+     */
     public void verEstadisticas(){
         System.out.println("Estadisticas: ");
         System.out.println("Nombre : " + getnombre());
@@ -108,6 +127,9 @@ public class Jugador extends Personaje{
         System.out.println("Arma : " + arma.getNombre());
     }
 
+    /**
+     * Muestra el inventario del jugador, desde su arma equipada hasta otros objetos equipados
+     */
     public void verInventario() {
         System.out.println("Inventario:");
         for (Item item : inventario) {
@@ -121,6 +143,16 @@ public class Jugador extends Personaje{
         }
     }
 
+    /**
+     * Combate entre el jugador y un personaje, casi siempre un enemigo
+     * en cada turno se restan los puntos de vida hasta que uno llegue a cero.
+     * El orden de turnos es aleatorio
+     * @param jugador: jugador que combate
+     * @param enemigo: enemigo que busca combatir
+     * @param input: input que es solicitado al usuario para empezar el duelo
+     * 
+     * @return (true/false) : devuelve true si el jugador gano la partida, caso contario, devuelve false
+     */
     public boolean combate(Jugador jugador, Personaje enemigo, Scanner input){
         boolean turnoJugador = Math.random() < 0.5;
         System.out.println("Vida de "+ jugador.getnombre() + ": " + jugador.getHp());
