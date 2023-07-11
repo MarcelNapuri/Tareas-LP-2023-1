@@ -11,4 +11,6 @@ Instrucciones:
 
 Detalles adicionales:
     -Para eliminar los archivos compilados use make clean
+    -El programa fue programado desde Linux Ubuntu 20.04.4 LTS
     -Para el compilador se utilizó openjdk 11.0.19
+    

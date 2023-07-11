@@ -1,0 +1,77 @@
+%grafo
+es_vecino(a,b).
+es_vecino(a,c).
+es_vecino(a,e).
+
+es_vecino(b,c).
+
+es_vecino(c,d).
+es_vecino(c,e).
+
+es_vecino(e,b).
+
+es_vecino(f,b).
+es_vecino(f,e).
+es_vecino(f,g).
+
+es_vecino(g,e).
+
+es_vecino(h,g).
+es_vecino(h,i).
+es_vecino(h,j).
+
+es_vecino(i,g).
+
+es_vecino(j,g).
+es_vecino(j,i).
+
+
+
+puedellegar(X, Y) :-
+    setof(Ruta,camino(X, Y, [], Ruta),ListaCaminos),
+    member(Ruta,ListaCaminos).
+
+camino(X, Y,Visitados,[X|Visitados]) :-
+    es_vecino(X, Y).
+
+camino(X, Y, Visitados,Camino) :-
+   es_vecino(X, M),
+   \+ member(M, Visitados),
+   camino(M, Y, [M | Visitados],Camino).
+
+
+
+vecinos(X, L) :- setof(Y, es_vecino(X, Y), Vecinos),
+    permutation(L,Vecinos).
+
+
+caminovalido([]).
+caminovalido([_]).
+caminovalido([X,Y|Resto]) :- es_vecino(X, Y), caminovalido([Y|Resto]).
+
+%caminomascorto(X,Y,L) :-
+ %   bfs(X,Y,[X],L).
+
+%bfs(NodoInicio, NodoFin, Visitados, Camino) :-
+ %   es_vecino(NodoInicio, NodoFin),
+  %  reverse([NodoFin | Visitados], Camino).
+
+%bfs(NodoInicio, NodoFin, Visitados, Camino) :-
+ %   es_vecino(NodoInicio, NodoIntermedio),
+  %  \+ member(NodoIntermedio, Visitados),
+   % bfs(NodoIntermedio, NodoFin, [NodoIntermedio | Visitados], Camino).
+
+caminomascorto(Inicio, Fin, Camino) :-
+    bfs([[Inicio]], Fin, CaminoReverso),
+    reverse(CaminoReverso, Camino).
+
+
+bfs([[Nodo|Camino]|_], Nodo, [Nodo|Camino]).
+bfs([[Nodo|Camino]|Cola], Destino, Resultado) :-
+    findall([Vecino, Nodo|Camino],
+            (es_vecino(Nodo, Vecino), \+ member(Vecino, [Nodo|Camino])),
+            NuevosCaminos),
+    append(Cola, NuevosCaminos, NuevaCola),
+    bfs(NuevaCola, Destino, Resultado).
+bfs([_|Cola], Destino, Resultado) :-
+    bfs(Cola, Destino, Resultado).
